@@ -30,6 +30,7 @@ html {
 }
 
 body {
+  padding-bottom: .5rem;
 }
 
 * {
@@ -42,9 +43,9 @@ body {
 }
 
 #app {
-  font-family: "blender";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #AAA;
+  font-family: "Source Code Pro"
 }
 </style>

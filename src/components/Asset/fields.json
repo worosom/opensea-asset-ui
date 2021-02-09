@@ -1,4 +1,10 @@
 [
-  "last_sale",
-  "orders"
+  "asset_contract",
+  "owner",
+  "description",
+  "num_sales",
+  "background_color",
+  "animation_url",
+  "animation_original_url",
+  "traits"
 ]

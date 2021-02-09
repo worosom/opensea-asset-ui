@@ -3,25 +3,32 @@
     <div class="asset_container">
       <div
         class="asset_container_child">
-        <field label="Artwork" :field="artworkField"/>
+        <field label="Artwork" :field="artworkField" :loading="loading"/>
       </div>
       <div
+        v-if="false"
         class="asset_container_child">
-        <field label="Artist" :field="artistField"/>
+        <field label="Creator" :field="artistField" :loading="loading"/>
       </div>
       <div
+        v-if="false"
         class="asset_container_child">
-        <field label="Owner" :field="ownerField"/>
+        <field label="Owner" :field="ownerField" :loading="loading"/>
       </div>
       <div
+        v-if="false"
         class="asset_container_child asset_contract">
-        <field label="asset_contract" :field="contractField"/>
+        <field label="asset_contract" :field="contractField" :loading="loading"/>
+      </div>
+      <div
+        class="asset_container_child last_sale">
+        <field label="last_sale" :field="lastSaleField" :loading="loading"/>
       </div>
       <template v-for="key in fields"
           :key="key">
-        <div
-          class="asset_container_child">
-          <field :label="key" :field="asset[key]"/>
+        <div 
+          :class="`asset_container_child asset_container_child--${key}`">
+          <field :label="key" :field="asset[key]" :loading="loading"/>
         </div>
       </template>
     </div>
@@ -39,20 +46,48 @@
     &_child
       width: 100%
       height: 100%
+      &--asset_contract
+        grid-column: 1/4
+        .field--asset_contract
+          display: grid
+          grid-template-columns: 1fr 1fr 1fr
+          grid-column-gap: 1rem
       &.asset_contract
         grid-column: 1/4
         .field--0
           display: grid
           grid-auto-flow: row
           grid-template-columns: repeat(2, 1fr)
+          grid-column-gap: 1rem
+      &.last_sale
+        grid-column: 2/4
+        .field--transaction
+          display: grid
+          grid-template-columns: 1fr 1fr
+          grid-column-gap: 1rem
+          .field_wrap
+            &--transaction
+              grid-column: 1/3
+            &--block_number
+              margin-top: 0
+
       .field
         position: relative
         word-wrap: break-word
         hyphens: auto
+        .string
+          display: grid
+          grid-template-columns: repeat(auto-fit, .6rem)
+          .char
+            text-align: center
         &_wrap
           padding: 1rem
           position: relative
+          transition: transform 200ms ease-out, opacity 200ms ease-out
+          transform: scale(1)
+          opacity: 1
           h1, h2, h3, h4, h5, h6
+            font-family: "blender";
             margin-top: 0
             margin-bottom: .5rem
           &:not(:first-child)
@@ -77,7 +112,11 @@
           &:hover
             &::before, &::after
               width: 50%
-              height: 50%
+              height: 100%
+    .field_wrap--loading
+      transform-origin: 50% 50%
+      transform: scale(.0)
+      opacity: 0
 
 
 *::-webkit-scrollbar
@@ -106,7 +145,7 @@ export default {
   computed: {
     artworkField() {
       const field = {}
-      const keys = ['name', 'image_thumbnail_url', 'permalink']
+      const keys = ['name', 'image_preview_url', 'permalink']
       keys.map(key => field[key] = this.asset[key])
       return field
     },
@@ -146,6 +185,31 @@ export default {
         }
       }
       return field
+    },
+    lastSaleField() {
+      let field = {}
+      if (Object.keys(this.asset).indexOf('last_sale') >= 0) {
+        const lastSale = this.asset['last_sale']
+        field = {
+          'total_price': lastSale['total_price'] / Math.pow(10, lastSale['payment_token']['decimals']) + lastSale['payment_token']['symbol'],
+          'created_date': lastSale['created_date'],
+          'transaction': {
+            'block_hash': lastSale['transaction']['block_hash'],
+            'block_number': lastSale['transaction']['block_number'],
+            'from_account': {
+              'name': lastSale['transaction']['from_account']['user']['username'],
+              'profile_img_url': lastSale['transaction']['from_account']['profile_img_url'],
+              'address': lastSale['transaction']['from_account']['address']
+            },
+            'to_account': {
+              'name': lastSale['transaction']['to_account']['user']['username'],
+              'profile_img_url': lastSale['transaction']['to_account']['profile_img_url'],
+              'address': lastSale['transaction']['to_account']['address']
+            },
+          }
+        }
+      }
+      return field
     }
   },
   beforeMount() {
@@ -155,12 +219,14 @@ export default {
       method: 'get'
     }).then(() => {
       this.asset = response.value.data
+      this.loading = false
     })
   },
   data() {
     return {
       asset: {},
-      fields
+      fields,
+      loading: true
     }
   }
 }

@@ -9,13 +9,21 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
-    "vue": "^3.0.0"
+    "qrcode.vue": "^3.2.2",
+    "vue": "^3.0.0",
+    "vue-i18n": "^9.0.0-rc.5",
+    "vue3-use-axios": "^0.2.2",
+    "stylus": "^0.54.8",
+    "stylus-loader": "3.0.2",
+    "vue-cli-plugin-axios": "~0.0.4"
   },
   "devDependencies": {
+    "@vue/babel-plugin-jsx": "^1.0.3",
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
     "@vue/compiler-sfc": "^3.0.0",
+    "axios": "^0.21.1",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^7.0.0-0"
