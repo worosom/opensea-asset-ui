@@ -1,26 +1,50 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div id="app">
+    <asset :assetUrl="assetUrl"/>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Asset from './components/Asset'
 
-export default {
+const apiUrl = 'https://api.opensea.io/api/v1/asset'
+
+export default ({
   name: 'App',
+  data() {
+    return {
+      assetUrl: `${apiUrl}${window.location.pathname}`
+    }
+  },
   components: {
-    HelloWorld
+    Asset
   }
-}
+})
 </script>
 
 <style>
+html {
+  background-color: black;
+  width: 100%;
+  height: 100%;
+}
+
+body {
+}
+
+* {
+  box-sizing: border-box;
+}
+
+@font-face {
+  font-family: 'blender';
+  src: url("./assets/subset-BlenderPro-Bold.woff2") format("woff2");
+}
+
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: "blender";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  color: #AAA;
 }
 </style>
