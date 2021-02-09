@@ -80,6 +80,7 @@
           grid-template-columns: repeat(auto-fit, .6rem)
           .char
             text-align: center
+            height: 1.2rem
         &_wrap
           padding: 1rem
           position: relative

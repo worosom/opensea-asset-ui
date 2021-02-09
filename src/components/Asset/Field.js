@@ -1,6 +1,7 @@
 import { h } from 'vue'
 import { useI18n } from 'vue-i18n'
 import QrcodeVue from 'qrcode.vue'
+import Character from './Character'
 
 const renderFields = (label, field, level, loading) => {
   const { t } = useI18n()
@@ -13,7 +14,7 @@ const renderFields = (label, field, level, loading) => {
   switch (type) {
     case 'number':
       field = String(field)
-      res.push(h('div', {class: 'string'}, field.split('').map(char => h('span', {class: 'char'}, char))))
+      res.push(h('div', {class: 'string'}, field.split('').map(char => h(Character, {class: 'char', char}))))
       break;
     case 'string':
       if (label.indexOf('img') >= 0 || label.indexOf('image') == 0 && label.indexOf('original') < 0) {
@@ -29,7 +30,7 @@ const renderFields = (label, field, level, loading) => {
         res.push(h('div', {style: `background: #${field}; width: 50px; height: 50px`}))
         break;
       }
-      res.push(h('div', {class: 'string'}, field.split('').map(char => h('span', {class: 'char'}, char))))
+      res.push(h('div', {class: 'string'}, field.split('').map(char => h(Character, {class: 'char', char}))))
       break;
     case 'boolean':
       res.push(h('span', {}, `[${field ? 'X' : '_' }]`))
