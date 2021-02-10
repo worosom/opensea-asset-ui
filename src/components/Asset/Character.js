@@ -5,12 +5,12 @@ export default {
     'char': {
       type: String,
       required: true,
-      default: ' '
+      default: '0'
     }
   },
   data() {
     return {
-      charCode: this.char.charCodeAt(0) + Math.floor(Math.random() * 512 - 256)
+      charCode: 0
     }
   },
   methods: {
@@ -21,10 +21,13 @@ export default {
         requestAnimationFrame(() => {
           this.update()
         })
+      } else {
+        this.$emit('done')
       }
     }
   },
-  mounted() {
+  created() {
+    this.charCode = this.char.charCodeAt(0) + Math.floor(Math.random() * 128 - 64)
     requestAnimationFrame(() => {
       this.update()
     })

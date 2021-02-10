@@ -26,7 +26,7 @@ const i18n = createI18n({
       total_price: 'Last Price',
       created_date: 'Date',
       transaction: 'Transaction',
-      block_hash: 'Block Hash',
+      block_hash: 'Block Transactions',
       block_number: 'Block Number',
       from_account: 'Buyer',
       to_account: 'Seller'

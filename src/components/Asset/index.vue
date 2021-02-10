@@ -16,11 +16,6 @@
         <field label="Owner" :field="ownerField" :loading="loading"/>
       </div>
       <div
-        v-if="false"
-        class="asset_container_child asset_contract">
-        <field label="asset_contract" :field="contractField" :loading="loading"/>
-      </div>
-      <div
         class="asset_container_child last_sale">
         <field label="last_sale" :field="lastSaleField" :loading="loading"/>
       </div>
@@ -70,14 +65,18 @@
               grid-column: 1/3
             &--block_number
               margin-top: 0
+            &--block_hash
+              grid-column: 1/3
 
       .field
         position: relative
         word-wrap: break-word
         hyphens: auto
+        transition: background 200ms
         .string
           display: grid
           grid-template-columns: repeat(auto-fit, .6rem)
+          cursor: default
           .char
             text-align: center
             height: 1.2rem
@@ -91,6 +90,7 @@
             font-family: "blender";
             margin-top: 0
             margin-bottom: .5rem
+            cursor: default
           &:not(:first-child)
             margin-top: 1rem
           &::before, &::after
@@ -99,17 +99,33 @@
             width: 77%
             height: 33%
             z-index: -1
-            transition: width 150ms ease-out, height 150ms ease-out
-          &::before
+          &--0
+            &:before, &:after
+              transition: width 150ms ease-out, height 150ms ease-out, transform 500ms ease-out 3000ms
+          &--1
+            &:before, &:after
+              transition: width 150ms ease-out, height 150ms ease-out, transform 500ms ease-out 3500ms
+          &--2
+            &:before, &:after
+              transition: width 150ms ease-out, height 150ms ease-out, transform 500ms ease-out 4000ms
+          &--3
+            &:before, &:after
+              transition: width 150ms ease-out, height 150ms ease-out, transform 500ms ease-out 4500ms
+          &--4
+            &:before, &:after
+              transition: width 150ms ease-out, height 150ms ease-out, transform 500ms ease-out 5000ms
+          &:before
             top: 0
             left: 0
             border-top: solid 1px #AAA
             border-left: solid 1px #AAA
-          &::after
+            transform-origin: 0 0
+          &:after
             right: 0
             bottom: 0
             border-right: solid 1px #AAA
             border-bottom: solid 1px #AAA
+            transform-origin: 100% 100%
           &:hover
             &::before, &::after
               width: 50%
@@ -118,6 +134,9 @@
       transform-origin: 50% 50%
       transform: scale(.0)
       opacity: 0
+      &:before, &:after
+        transform: scale(.0)
+
 
 
 *::-webkit-scrollbar
@@ -146,7 +165,7 @@ export default {
   computed: {
     artworkField() {
       const field = {}
-      const keys = ['name', 'image_preview_url', 'permalink']
+      const keys = ['name', 'description', 'image_preview_url', 'permalink']
       keys.map(key => field[key] = this.asset[key])
       return field
     },
@@ -189,31 +208,28 @@ export default {
     },
     lastSaleField() {
       let field = {}
-      if (Object.keys(this.asset).indexOf('last_sale') >= 0) {
-        const lastSale = this.asset['last_sale']
-        field = {
-          'total_price': lastSale['total_price'] / Math.pow(10, lastSale['payment_token']['decimals']) + lastSale['payment_token']['symbol'],
-          'created_date': lastSale['created_date'],
-          'transaction': {
-            'block_hash': lastSale['transaction']['block_hash'],
-            'block_number': lastSale['transaction']['block_number'],
-            'from_account': {
-              'name': lastSale['transaction']['from_account']['user']['username'],
-              'profile_img_url': lastSale['transaction']['from_account']['profile_img_url'],
-              'address': lastSale['transaction']['from_account']['address']
-            },
-            'to_account': {
-              'name': lastSale['transaction']['to_account']['user']['username'],
-              'profile_img_url': lastSale['transaction']['to_account']['profile_img_url'],
-              'address': lastSale['transaction']['to_account']['address']
-            },
-          }
+      const lastSale = this.asset['last_sale'] || require('./transaction.js').default
+      field = {
+        'total_price': lastSale['total_price'] / Math.pow(10, lastSale['payment_token']['decimals']) + lastSale['payment_token']['symbol'],
+        'created_date': lastSale['created_date'],
+        'transaction': {
+          'block_hash': lastSale['transaction']['block_hash'],
+          'from_account': {
+            'name': lastSale['transaction']['from_account']['user']['username'],
+            'profile_img_url': lastSale['transaction']['from_account']['profile_img_url'],
+            'address': lastSale['transaction']['from_account']['address']
+          },
+          'to_account': {
+            'name': lastSale['transaction']['to_account']['user']['username'],
+            'profile_img_url': lastSale['transaction']['to_account']['profile_img_url'],
+            'address': lastSale['transaction']['to_account']['address']
+          },
         }
       }
       return field
     }
   },
-  beforeMount() {
+  beforeCreate() {
     const { response, exec } = useAxios()
     exec({
       url: this.assetUrl,
