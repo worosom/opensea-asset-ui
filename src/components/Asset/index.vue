@@ -32,37 +32,47 @@
 <style lang="stylus">
 .asset
   &_container
+    @media (min-width:961px)
+      margin: 0 auto
+      max-width: 961px
     width: 100%
     display: grid
     grid-auto-flow: row
-    grid-template-columns: repeat(3, 1fr)
+    @media (min-width:961px)
+      grid-template-columns: repeat(3, 1fr)
     grid-column-gap: 1rem
     grid-row-gap: 1rem
     &_child
       width: 100%
       height: 100%
       &--asset_contract
-        grid-column: 1/4
+        @media (min-width:961px)
+          grid-column: 1/4
         .field--asset_contract
           display: grid
-          grid-template-columns: 1fr 1fr 1fr
+          grid-template-columns: 1fr 1fr
+          @media (min-width:961px)
+            grid-template-columns: 1fr 1fr 1fr
           grid-column-gap: 1rem
       &.asset_contract
         grid-column: 1/4
         .field--0
           display: grid
           grid-auto-flow: row
-          grid-template-columns: repeat(2, 1fr)
+          @media (min-width:961px)
+            grid-template-columns: repeat(2, 1fr)
           grid-column-gap: 1rem
       &.last_sale
-        grid-column: 2/4
+        @media (min-width:961px)
+          grid-column: 2/4
         .field--transaction
           display: grid
           grid-template-columns: 1fr 1fr
           grid-column-gap: 1rem
           .field_wrap
             &--transaction
-              grid-column: 1/3
+              @media (min-width:961px)
+                grid-column: 1/3
             &--block_number
               margin-top: 0
             &--block_hash
@@ -80,17 +90,27 @@
           .char
             text-align: center
             height: 1.2rem
+            transition: background-color 1000ms ease
+            &::selection
+              color: #333
+              background-color: #AAA
+            &:hover
+              background-color: #333
+              transition: background-color 250ms ease
         &_wrap
           padding: 1rem
           position: relative
-          transition: transform 200ms ease-out, opacity 200ms ease-out
+          transition: transform 200ms ease-out, filter 200ms ease-out
           transform: scale(1)
-          opacity: 1
+          filter: opacity(1)
           h1, h2, h3, h4, h5, h6
             font-family: "blender";
             margin-top: 0
             margin-bottom: .5rem
             cursor: default
+            &::selection
+              color: #333
+              background-color: #AAA
           &:not(:first-child)
             margin-top: 1rem
           &::before, &::after
@@ -133,11 +153,9 @@
     .field_wrap--loading
       transform-origin: 50% 50%
       transform: scale(.0)
-      opacity: 0
+      filter: opacity(0)
       &:before, &:after
         transform: scale(.0)
-
-
 
 *::-webkit-scrollbar
     height: 2ex

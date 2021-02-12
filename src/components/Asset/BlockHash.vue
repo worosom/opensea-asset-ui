@@ -29,6 +29,7 @@ export default {
     .linkWidth('value')
     .linkDirectionalParticleWidth('value')
     .linkCurvature('value')
+    .cooldownTime(5000)
     const web3 = new Web3('https://cloudflare-eth.com')
     web3.getBlock(this.blockHash, true).then(block => {
       this.gData = {}

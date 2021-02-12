@@ -6,6 +6,10 @@ export default {
       type: String,
       required: true,
       default: '0'
+    },
+    'loading': {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -28,6 +32,8 @@ export default {
   },
   created() {
     this.charCode = this.char.charCodeAt(0) + Math.floor(Math.random() * 128 - 64)
+  },
+  mounted() {
     requestAnimationFrame(() => {
       this.update()
     })
